@@ -49,7 +49,7 @@ namespace StockPNLgenerator
                     da.Fill(dataset, "table1");
                     dgvData.AutoGenerateColumns = true;
                     dgvData.DataSource = dataset.Tables["table1"];
-                    //This message box below, shows how to graba specific day's data:
+                    //This message box below, shows how to grab a specific day's data:
                     MessageBox.Show($"BTW on {dataset.Tables[0].Rows[1].ItemArray[0]} the price of {symbol} was {dataset.Tables[0].Rows[1].ItemArray[1]}");
                 //dgvData.Refresh();            
             }            
