@@ -29,21 +29,24 @@ namespace StockPNLgenerator
         {
             SqlConnection sqlCon = null; 
             try
-                {                //sqlCon = new SqlConnection("Server=LCW-101-Win10;Database=MCO343;Trusted_Connection=True;");                
-                                 //sqlCon = new SqlConnection("Server=AKLENOVO\\SQLEXPRESS;Database=WallStreet;Trusted_Connection=True;");                
-                                 //sqlCon = new SqlConnection("Server=DESKTOP-17VOE83;Database=FinanceF20;Trusted_Connection=True;");                
+                {   //get database parameters from App.config file
                     String strServer = ConfigurationManager.AppSettings["server"];
                     String strDatabase = ConfigurationManager.AppSettings["database"];
+                    //open connection to database
                     String strConnect = $"Server={strServer};Database={strDatabase};Trusted_Connection=True;";
                     sqlCon = new SqlConnection(strConnect);
                     sqlCon.Open();
+                    //prepare parameters for stored procedure called below
                     double minPrc = Convert.ToDouble(nudWprice.Value);
                     String symbol = tbSymbol.Text;
+                    //set up call to spGetPrcForSymbol stored procedure
                     SqlCommand sqlCmd = new SqlCommand("spGetPrcForSymbol", sqlCon);
                     sqlCmd.CommandType = CommandType.StoredProcedure;
                     sqlCmd.Parameters.Add("@Symbol", System.Data.SqlDbType.VarChar).Value = symbol;
                     sqlCmd.Parameters.Add("@MinPrc", System.Data.SqlDbType.Float).Value = minPrc;
+                    //execute spGetPrcForSymbol
                     sqlCmd.ExecuteNonQuery();
+                    //get data returned by spGetPrcForSymbol and display it
                     SqlDataAdapter da = new SqlDataAdapter(sqlCmd);
                     DataSet dataset = new DataSet();
                     da.Fill(dataset, "table1");
